@@ -1,7 +1,7 @@
 ####################################################################################################################
 # Шахнович Дмитрий ИУ7-12Б
 #
-#
+# Повернуть матрицу на 90 градусов по часовой стрелке, затем против часовой
 ####################################################################################################################
 
 WALL_SYMB = " "
@@ -15,7 +15,7 @@ if n <= 0:
 max_elem_len = len(str(n)) + 4  # Максимальная ширина элемента
 matrix = [[0] * n for _ in range(n)]  # Пустая матрица
 
-for i in range(n):
+for i in range(n):  # Ввод матрицы
     for j in range(n):
         matrix[i][j] = int(input(f"Введите элемент {i + 1}-ой строки {j + 1}-ого столбца: "))
         max_elem_len = max(max_elem_len, len(str(matrix[i][j])) + 4)
@@ -34,6 +34,7 @@ for i in range(n):
     print(CEIL_SYMB * table_length)
 print()
 
+# Поворот по часовой стрелке
 for i in range(n // 2):
     for j in range(i, n - i - 1):
         temp = matrix[i][j]
@@ -53,6 +54,7 @@ for i in range(n):
     print(CEIL_SYMB * table_length)
 print()
 
+# Поворот против часовой стрелки
 for i in range(n // 2):
     for j in range(i, n - i - 1):
         temp = matrix[i][j]
@@ -60,7 +62,6 @@ for i in range(n // 2):
         matrix[j][n - 1 - i] = matrix[n - 1 - i][n - 1 - j]
         matrix[n - 1 - i][n - 1 - j] = matrix[n - 1 - j][i]
         matrix[n - 1 - j][i] = temp
-
 
 print("Финальная таблица:")
 # Шапка таблицы
