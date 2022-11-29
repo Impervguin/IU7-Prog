@@ -48,6 +48,7 @@ print(CEIL_SYMB * table_length)
 for i in range(nd):
     # Строки матрицы
     print(str(i + 1).center(max_elem_len) + WALL_SYMB + WALL_SYMB.join(
-    [(f"{elem:.5g}" if elem != float('-inf') else "-").center(max_elem_len) for elem in A[i] + [AV[i]] + [L[i]]]) + WALL_SYMB)
+        [(f"{elem:.5g}" if elem != float('-inf') else "-").center(max_elem_len) for elem in
+         A[i] + [AV[i]] + [L[i]]]) + WALL_SYMB)
     print(CEIL_SYMB * table_length)
 print()

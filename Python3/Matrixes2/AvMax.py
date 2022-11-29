@@ -11,9 +11,9 @@ WALL_SYMB = " "
 CEIL_SYMB = " "
 
 nd, md = map(int, input("Введите через пробел количество строк и столбцов матрицы D: ").split())
-nl = int(input("Введите размер массива l: "))
+nl = int(input("Введите размер массива I: "))
 if md <= 0 or nd <= 0 or nl <= 0:
-    print("Некорректные размеры матрицы.")
+    print("Некорректные размеры матрицы или массива.")
     exit()
 max_elem_len = 0
 D = [[0] * md for _ in range(nd)]

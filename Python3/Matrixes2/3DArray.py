@@ -13,7 +13,7 @@ if n <= 0 or m <= 0 or k <= 0:
     print("Некорректные данные.")
     exit()
 I = int(input("Введите номер среза: "))
-if I >= m:
+if I >= m or I <= 0:
     print("Некорректные данные.")
     exit()
 
@@ -22,7 +22,7 @@ A = [[[0] * k for _ in range(m)] for _ in range(n)]
 for i in range(n):
     for j in range(m):
         for h in range(k):
-            A[i][j][h] = int(
+            A[i][j][h] = float(
                 input(f"Введите элемент в {i + 1}-ой строке {j + 1}-ом столбе {h + 1}-ой глубины матрицы A: "))
             max_elem_len = max(len(str(A[i][j])), max_elem_len)
 max_elem_len += 2
@@ -34,7 +34,7 @@ slice = [[A[i][I - 1][j] for j in range(k)] for i in range(n)]
 
 print("Матрица-срез:")
 # Шапка таблицы
-print(" " * max_elem_len + WALL_SYMB + WALL_SYMB.join([str(i + 1).center(max_elem_len) for i in range(m)]) + WALL_SYMB)
+print(" " * max_elem_len + WALL_SYMB + WALL_SYMB.join([str(i + 1).center(max_elem_len) for i in range(k)]) + WALL_SYMB)
 print(CEIL_SYMB * table_length)
 for i in range(n):
     # Строки матрицы
