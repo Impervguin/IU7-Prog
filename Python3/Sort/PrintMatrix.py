@@ -15,6 +15,9 @@ def print_matrix(mat, wall_symb="|", ceil_symb="-", head=None, foot=None, name="
     for i in range(len(mat)):
         for j in range(len(mat[0])):
             max_elem_len = max(max_elem_len, len(str(mat[i][j])) + 4)
+    for el in head:
+        max_elem_len = max(max_elem_len, len(str(el)) + 4)
+
     table_length = (max_elem_len + 1) * (len(mat[0])) + foot_len
     print(name.center(table_length))
     print(" " * foot_len + wall_symb + wall_symb.join(
