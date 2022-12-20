@@ -40,6 +40,12 @@ if [[ ! -f $file1 ]] || [[ ! -f $file2 ]]; then
     exit 3
 fi
 
+if [[ ! -r $file1 ]] || [[ ! -r $file2 ]]; then
+    if [[ -n $verbose ]]; then
+        echo "One of files are not available for reading"
+    fi
+    exit 4
+fi
 
 if [[ -n $verbose ]]; then
     echo "Correct input"
