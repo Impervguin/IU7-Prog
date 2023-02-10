@@ -1,8 +1,29 @@
+
 #!/bin/bash
 
 n=0
+function find_after_string {
+    sep="string:"
+    found=0
+    while read -r line; do
+        if [[ "$line" == *"$sep"* ]] && [[ $found -eq 0 ]]; then
+            found=1
+            before1=${line%%"$sep"*}
+            ind1=${#before1}
+            after1=${line:$(($ind1))}
+            if [[ -z $after1 ]]; then
+                line=$before1
+            else
+                line=$after1
+            fi
+            echo $line > $2
+        else
+            echo $line >> $2
+        fi
+   done < $1
+}
 
-while [[ $n -lt 3 ]]; do
+while [[ $n -lt 3 ]] && [[ -n $1 ]]; do
     if [[ $1 == "-v" ]]; then 
     	verbose=1
     else 
@@ -16,56 +37,69 @@ while [[ $n -lt 3 ]]; do
     n=$(($n + 1))
 done
 
-if [ -z $file1 -o -z $file2 ]; then
-    if [ -n $verbose ]; then
+if [[ -z $file1 ]] || [[ -z $file2 ]]; then
+    if [[ -n $verbose ]]; then
         echo "Incorrect input"
     fi
     exit 2
 fi
 
-if [ ! -f $file1 -o ! -f $file2 ]; then
-    if [ -n $verbose ]; then
+if [[ ! -f $file1 ]] || [[ ! -f $file2 ]]; then
+    if [[ -n $verbose ]]; then
         echo "One of files is not a file or not exists"
     fi
     exit 3
 fi
 
+if [[ ! -r $file1 ]] || [[ ! -r $file2 ]]; then
+    if [[ -n $verbose ]]; then
+        echo "One of files are not available for reading"
+    fi
+    exit 4
+fi
 
-if [ -n $verbose ]; then
+
+if [[ -n $verbose ]]; then
     echo "Correct input"
 fi
 
-text1=$(cat $file1)
-text2=$(cat $file2)
-sep='string:'
+after_text_file1=$(mktemp)
+after_text_file2=$(mktemp)
 
-before1=${text1%%"$sep"*}
-ind1=${#before1}
-after1=${text1:$(($ind1))}
-if [[ -z $after1 ]]; then
-    after1=$before1
-fi
+find_after_string $file1 $after_text_file1
+find_after_string $file2 $after_text_file2
 
-before2=${text2%%"$sep"*}
-ind2=${#before2}
-after2=${text2:$(($ind2))}
-if [[ -z $after2 ]]; then
-    after2=$before2
-fi
+exec 3<$after_text_file1
+exec 4<$after_text_file2
 
-if [ -n $verbose ]; then
-    echo "Text from file 1: "$after1
-    echo "Text from file 2: "$after2
-fi
+end_f1=1
+end_f2=1
 
-if [[ $after1 == $after2 ]]; then
-    if [ -n $verbose ]; then
+while [[ $end_f1 -gt 0 ]] && [[ $end_f2 -gt 0 ]]; do
+    if ! read line1 <&3; then
+        end_f1=0
+    fi
+    if ! read line2 <&4; then
+        end_f2=0
+    fi
+    if [[ -n $verbose ]]; then
+        echo "Line from file 1: "$line1
+        echo "Line from file 2: "$line2
+    fi 
+    if [[ $line1 != $line2 ]]; then
+        break
+    fi   
+done
+
+if [[ $end_f2 -eq 0 ]] && [[ $end_f1 -eq 0 ]]; then
+    if [[ -n $verbose ]]; then
         echo "Files have the same content"
     fi
   exit 0
 else
-    if [ -n $verbose ]; then
+    if [[ -n $verbose ]]; then
         echo "Files does not have the same content"
     fi
   exit 1
 fi
+
